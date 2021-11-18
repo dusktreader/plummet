@@ -24,8 +24,8 @@ format: install
 	poetry run isort ${PACKAGE_NAME} tests
 
 publish: install
-	git tag v$(poetry version --short)
-	git push origin v$(poetry version --short)
+	git tag v$(shell poetry version --short)
+	git push origin v$(shell poetry version --short)
 
 clean: clean-eggs clean-build
 	@find . -iname '*.pyc' -delete

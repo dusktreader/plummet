@@ -17,7 +17,7 @@ jobs:
           python-version: 3.8.10
       - uses: Gr1N/setup-poetry@v7
       - name: login
-        run: poetry config http-basic.pypi __token__ ${{ secrets.OMNIVECTOR_PYPI_TOKEN }}
+        run: poetry config http-basic.pypi __token__ ${{ secrets.PYPI_TOKEN }}
       - name: build
         run: poetry build
       - name: publish
