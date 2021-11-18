@@ -39,7 +39,7 @@ addopts = "--random-order"
 testpaths = ["tests"]
 
 [[tool.mypy.overrides]]
-module = [ "buzz", "time-machine" ]
+module = [ "buzz", "time_machine" ]
 ignore_missing_imports = true
 
 [build-system]
