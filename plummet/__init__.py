@@ -4,6 +4,13 @@ from typing import Union
 import buzz
 import pendulum
 
+try:
+    import time_machine
+
+    has_time_machine = True
+except ImportError:
+    has_time_machine = False
+
 
 class PlummetError(buzz.Buzz):
     """
@@ -20,8 +27,15 @@ def frozen_time(moment: AGGREGATE_TYPE = None):
     """
     Returns the ``pendulum.test()`` context manager initialized with
     a momentized timestamp.
+
+    If time-machine is installed, it will use ``travel()`` instead so
+    that calls to datetime.now() are also affected.
+
     """
-    return pendulum.test(momentize(moment))
+    if has_time_machine:
+        return time_machine.travel(momentize(moment), tick=False)
+    else:
+        return pendulum.test(momentize(moment))
 
 
 def momentize(moment: AGGREGATE_TYPE = None):

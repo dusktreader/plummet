@@ -6,6 +6,9 @@ The most useful method for testing is the [frozen_time()](#frozen_time)
 method which allows you to fix a moment in time so that all calls to
 `pendulum.now()` return the provided timestamp.
 
+It is also possible to freeze timestamps given by `datetime.now()` by
+[installing the time-machine](#feezing_datetime_now) extra dependency.
+
 
 ## Methods
 
@@ -123,6 +126,41 @@ Freeze time at a specific moment:
 ...     print(now)
 ...
 2021-11-17T22:03:00+00:00
+```
+
+
+## Freezing datetime.now()
+
+By default, the `frozen_time` method only works for `pendulum.now()`. However, if you
+install with the extra "time-machine", it is possible to make `frozen_time` work with
+`datetime.now()` as well.
+
+
+### Installing the extra "time-machine" dependency
+
+To install the extra dependency with pip:
+
+```
+$ pip install plummet[time-machine]
+```
+
+To install the extra dependency with poetry:
+
+```
+$ poetry add plummet[time-machine]
+```
+
+Now, plummet will freeze `datetime.now()` as well:
+
+```
+>>> with frozen_time("2021-11-17 22:03:00"):
+...     pendulum_now = pendulum.now("UTC")
+...     datetime_now = datetime.now(tz=timezone.utc)
+...     print(pendulum_now)
+...     print(datetime_now)
+...
+2021-11-17T22:03:00+00:00
+2021-11-17 22:03:00+00:00
 ```
 
 

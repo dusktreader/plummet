@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+from unittest import mock
 
 import pendulum
 import pytest
@@ -71,9 +72,20 @@ def test_moments_match__raises_error_if_moments_do_not_match():
         moments_match(frozen_moment, "1970-01-01T00:00:00+00:00")
 
 
-def test_frozen_time__freezes_time_to_a_given_timestamp():
+def test_frozen_time__freezes_time_using_time_machine_if_available():
+    pytest.importorskip("time_machine")
     frozen_moment = pendulum.parse("2021-11-17T20:36:00+00:00")
     with frozen_time("2021-11-17T20:36:00+00:00"):
-        now = pendulum.now("UTC")
+        pendulum_now = pendulum.now("UTC")
+        datetime_now = datetime.now(tz=timezone.utc)
+
+    assert pendulum_now == momentize(datetime_now) == frozen_moment
+
+
+def test_frozen_time__freezes_time_using_pendulum_test():
+    frozen_moment = pendulum.parse("2021-11-17T20:36:00+00:00")
+    with mock.patch("plummet.has_time_machine", return_value=None):
+        with frozen_time("2021-11-17T20:36:00+00:00"):
+            now = pendulum.now("UTC")
 
     assert now == frozen_moment

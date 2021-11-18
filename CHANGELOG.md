@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## v0.2.0 - 2021-11-18
+- Added optional extra time-machine to allow freezing of datetime.now()
+
 ## v0.1.1 - 2021-11-17
 - Added support for python 3.6 and 3.7
 
