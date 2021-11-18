@@ -3,7 +3,7 @@
 Methods for testing with [pendulum](https://pendulum.eustace.io/) timestamps.
 
 The most useful method for testing is the [frozen_time()](#frozen_time)
-which allows you to fix a moment in time so that all calls to
+method which allows you to fix a moment in time so that all calls to
 `pendulum.now()` return the provided timestamp.
 
 
@@ -130,13 +130,13 @@ Freeze time at a specific moment:
 
 To run the testing suite:
 
-```bash
+```
 $ make test
 ```
 
 
 To run the full set of quality checks:
 
-```bash
+```
 $ make qa
 ```
