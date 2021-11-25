@@ -33,10 +33,6 @@ def frozen_time(moment: AGGREGATE_TYPE = None):
 
     """
     if has_time_machine:
-        print("HAS TIME MACHINE? ", has_time_machine)
-        print("TIME MACHINE? ", time_machine)
-        print("TYPE TIME MACHINE? ", type(time_machine))
-        print("DIR TIME MACHINE? ", dir(time_machine))
         return time_machine.travel(momentize(moment), tick=False)
     else:
         return pendulum.test(momentize(moment))

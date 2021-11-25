@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## v0.2.1 - 2021-11-25
+- Removed debugging print statements
+
 ## v0.2.0 - 2021-11-18
 - Added optional extra time-machine to allow freezing of datetime.now()
 
