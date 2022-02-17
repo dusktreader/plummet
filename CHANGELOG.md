@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## v1.0.0 - 2022-02-16
+- Removed support for python 3.6
+- Updated py-buzz requirement to 3.0.0
+
 ## v0.2.1 - 2021-11-25
 - Removed debugging print statements
 
