@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "plummet"
-version = "1.0.0"
+version = "1.1.0"
 description = "Utilities for testing with pendulum timestamps"
 authors = ["Tucker Beck <tucker.beck@gmail.com>"]
 license = "MIT"
@@ -8,18 +8,18 @@ readme = "README.md"
 repository = "https://github.com/dusktreader/plummet"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.6.2"
 pendulum = "^2.1.2"
-py-buzz = "^3.0.0"
+py-buzz = "^3.1.0"
 time-machine = {version = "^2.4.0", optional = true}
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 pytest-random-order = "^1.0.4"
 mypy = "^0.910"
-black = "^21.11b1"
+black = "^22.1.0"
 isort = "^5.10.1"
-flake8 = "^4.0.1"
+pyproject-flake8 = "^0.0.1-alpha.2"
 
 [tool.poetry.extras]
 time-machine = ["time-machine"]
@@ -32,6 +32,10 @@ line_length = 100
 src_paths = ["plummet", "tests"]
 multi_line_output = 3
 include_trailing_comma = true
+
+[tool.flake8]
+max-line-length = 100
+max-complexity = 40
 
 [tool.pytest.ini_options]
 minversion = "6.0"

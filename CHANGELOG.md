@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## v1.1.0 - 2022-03-24
+- Returned support for python 3.6
+- Updated py-buzz requirement to 3.1.0
+
 ## v1.0.0 - 2022-02-16
 - Removed support for python 3.6
 - Updated py-buzz requirement to 3.0.0
