@@ -1,32 +1,39 @@
 SHELL:=/bin/bash
 PACKAGE_NAME:=plummet
-ROOT_DIR:=$(shell dirname $(shell pwd))
 
+.PHONY: install
 install:
 	poetry install
 
+.PHONY: test
 test: install
 	poetry run pytest
 
+.PHONY: mypy
 mypy: install
 	poetry run mypy ${PACKAGE_NAME} --pretty
 
+.PHONY: lint
 lint: install
 	poetry run black --check ${PACKAGE_NAME} tests
 	poetry run isort --check ${PACKAGE_NAME} tests
-	poetry run flake8 --max-line-length=100 ${PACKAGE_NAME} tests
+	poetry run pflake8 ${PACKAGE_NAME} tests
 
+.PHONY: qa
 qa: test mypy lint
-	echo "All tests pass! Ready for deployment"
+	echo "All quality checks pass!"
 
+.PHONY: format
 format: install
 	poetry run black ${PACKAGE_NAME} tests
 	poetry run isort ${PACKAGE_NAME} tests
 
+.PHONY: publish
 publish: install
 	git tag v$(shell poetry version --short)
 	git push origin v$(shell poetry version --short)
 
+.PHONY: clean
 clean: clean-eggs clean-build
 	@find . -iname '*.pyc' -delete
 	@find . -iname '*.pyo' -delete
