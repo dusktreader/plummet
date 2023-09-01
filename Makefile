@@ -3,7 +3,7 @@ PACKAGE_NAME:=plummet
 
 .PHONY: install
 install:
-	poetry install
+	poetry install --extras=time-machine
 
 .PHONY: test
 test: install
@@ -15,9 +15,7 @@ mypy: install
 
 .PHONY: lint
 lint: install
-	poetry run black --check ${PACKAGE_NAME} tests
-	poetry run isort --check ${PACKAGE_NAME} tests
-	poetry run pflake8 ${PACKAGE_NAME} tests
+	poetry run ruff check ${PACKAGE_NAME} tests
 
 .PHONY: qa
 qa: test mypy lint
@@ -25,8 +23,7 @@ qa: test mypy lint
 
 .PHONY: format
 format: install
-	poetry run black ${PACKAGE_NAME} tests
-	poetry run isort ${PACKAGE_NAME} tests
+	poetry run ruff check ${PACKAGE_NAME} tests --fix
 
 .PHONY: publish
 publish: install
