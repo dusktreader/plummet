@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## v1.2.1 - 2023-08-31
+- Fixed CI/CD
+
 ## v1.2.0 - 2023-08-31
+- Dropped support for python 3.6 and 3.7
 - Loosened dependencies
 
 ## v1.1.0 - 2022-03-24

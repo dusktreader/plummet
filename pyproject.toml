@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "plummet"
-version = "1.2.0"
+version = "1.2.1"
 description = "Utilities for testing with pendulum timestamps"
 authors = ["Tucker Beck <tucker.beck@gmail.com>"]
 license = "MIT"
