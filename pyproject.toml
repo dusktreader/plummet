@@ -18,6 +18,7 @@ pytest = "^6.2.5"
 pytest-random-order = "^1.0.4"
 ruff = "^0.0.286"
 mypy = "^0.910"
+pytest-cov = "^4.1.0"
 
 [tool.poetry.extras]
 time-machine = ["time-machine"]
@@ -27,7 +28,13 @@ line-length = 100
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "--random-order"
+addopts = [
+    "--random-order",
+    "--cov=plummet",
+    "--cov-report=term-missing",
+    "--cov-report=json",
+    "--cov-fail-under=90",
+]
 testpaths = ["tests"]
 
 [[tool.mypy.overrides]]
