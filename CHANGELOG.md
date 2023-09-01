@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## v1.2.0 - 2023-08-31
+- Loosened dependencies
+
 ## v1.1.0 - 2022-03-24
 - Returned support for python 3.6
 - Updated py-buzz requirement to 3.1.0
