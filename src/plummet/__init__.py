@@ -29,7 +29,7 @@ def frozen_time(moment: AGGREGATE_TYPE = None):
     if has_time_machine:
         return time_machine.travel(momentize(moment), tick=False)
     else:
-        return pendulum.travel_to(momentize(moment))
+        return pendulum.travel_to(momentize(moment), freeze=True)
 
 
 def momentize(moment: AGGREGATE_TYPE = None):

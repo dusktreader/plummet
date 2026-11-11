@@ -1,3 +1,4 @@
+import time
 from datetime import UTC, datetime, timedelta, timezone
 from typing import cast
 from unittest import mock
@@ -83,13 +84,24 @@ def test_frozen_time__freezes_time_using_time_machine_if_available():
     with plummet.frozen_time("2021-11-17T20:36:00+00:00"):
         pendulum_now = pendulum.now("UTC")
         datetime_now = datetime.now(tz=UTC)
+        time.sleep(0.01)
+        pendulum_later = pendulum.now("UTC")
+        datetime_later = datetime.now(tz=UTC)
 
-    assert pendulum_now == plummet.momentize(datetime_now) == frozen_moment
+    assert (
+        pendulum_now
+        == pendulum_later
+        == plummet.momentize(datetime_now)
+        == plummet.momentize(datetime_later)
+        == frozen_moment
+    )
 
 
-def test_frozen_time__freezes_time_using_pendulum_test():
+def test_frozen_time__freezes_time_using_pendulum_travel_to():
     frozen_moment = _parse_as_datetime("2021-11-17T20:36:00+00:00")
     with mock.patch.object(plummet, "has_time_machine", new=False), plummet.frozen_time("2021-11-17T20:36:00+00:00"):
         now = pendulum.now("UTC")
+        time.sleep(0.01)
+        later = pendulum.now("UTC")
 
-    assert now == frozen_moment
+    assert now == later == frozen_moment
