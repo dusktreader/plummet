@@ -1,5 +1,4 @@
 import datetime
-from typing import Union
 
 import buzz
 import pendulum
@@ -8,8 +7,8 @@ try:
     import time_machine
 
     has_time_machine = True
-except ImportError:
-    has_time_machine = False
+except ImportError:  # pragma: no cover
+    has_time_machine = False  # pragma: no cover
 
 
 class PlummetError(buzz.Buzz):
@@ -17,32 +16,26 @@ class PlummetError(buzz.Buzz):
     Custom exception for the plummet package
     """
 
-    pass
 
-
-AGGREGATE_TYPE = Union[None, str, datetime.datetime, pendulum.DateTime]
+AGGREGATE_TYPE = datetime.datetime | pendulum.DateTime | str | None
 
 
 def frozen_time(moment: AGGREGATE_TYPE = None):
     """
-    Returns the ``pendulum.test()`` context manager initialized with
-    a momentized timestamp.
+    Returns the `pendulum.test()` context manager initialized with a momentized timestamp.
 
-    If time-machine is installed, it will use ``travel()`` instead so
-    that calls to datetime.now() are also affected.
-
+    If time-machine is installed, it will use `travel()` instead so that calls to datetime.now() are also affected.
     """
     if has_time_machine:
         return time_machine.travel(momentize(moment), tick=False)
     else:
-        return pendulum.test(momentize(moment))
+        return pendulum.travel_to(momentize(moment))
 
 
 def momentize(moment: AGGREGATE_TYPE = None):
     """
-    Produces a pendulum.DateTime instance in UTC given a string
-    timestamp, a datetime instance, a pendulum instance, or the
-    current time (if passed None).
+    Produces a `pendulum.DateTime` instance in UTC given a string timestamp, a datetime instance, a pendulum instance,
+    or the current time (if passed `None`).
 
     Raises an exception if another type is passed.
     """
@@ -50,12 +43,11 @@ def momentize(moment: AGGREGATE_TYPE = None):
         return pendulum.now("UTC")
     elif isinstance(moment, str):
         return pendulum.parse(moment, tz="UTC")
-    elif isinstance(moment, datetime.datetime):
-        return pendulum.instance(moment).in_tz("UTC")
     elif isinstance(moment, pendulum.DateTime):
         return moment.in_tz("UTC")
-    else:
-        raise PlummetError(f"Cannot create a moment from {moment}")
+    elif isinstance(moment, datetime.datetime):
+        return pendulum.instance(moment).in_tz("UTC")
+    raise PlummetError(f"Cannot create a moment from {moment}")
 
 
 def moments_match(moment1: AGGREGATE_TYPE, moment2: AGGREGATE_TYPE):

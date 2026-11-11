@@ -1,13 +1,16 @@
+[![Latest Version](https://img.shields.io/pypi/v/plummet?label=pypi-version&logo=python&style=plastic)](https://pypi.org/project/plummet/)
+[![Python Versions](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fdusktreader%2Fplummet%2Fmain%2Fpyproject.toml&style=plastic&logo=python&label=python-versions)](https://www.python.org/)
+[![Build Status](https://github.com/dusktreader/plummet/actions/workflows/main.yml/badge.svg)](https://github.com/dusktreader/plummet/actions/workflows/main.yml)
+
 # Plummet
 
 Methods for testing with [pendulum](https://pendulum.eustace.io/) timestamps.
 
-The most useful method for testing is the [frozen_time()](#frozen_time)
-method which allows you to fix a moment in time so that all calls to
-`pendulum.now()` return the provided timestamp.
+The most useful method for testing is the [frozen_time()](#frozen_time) method which allows you to
+fix a moment in time so that all calls to `pendulum.now()` return the provided timestamp.
 
-It is also possible to freeze timestamps given by `datetime.now()` by
-[installing the time-machine](#feezing_datetime_now) extra dependency.
+It is also possible to freeze timestamps given by `datetime.now()` by [installing the
+time-machine](#feezing_datetime_now) extra dependency.
 
 
 ## Methods
