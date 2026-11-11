@@ -1,46 +1,119 @@
-SHELL:=/bin/bash
+default: help
+
+
+## ==== Quality Control ================================================================================================
+
+qa: qa/full  ## Shortcut for qa/full
+
+qa/test:  ## Run all tests
+	@uv run pytest
+
+qa/types:  ## Run static type checks
+	@uv run ty check ${PACKAGE_TARGET} tests
+
+qa/lint:  ## Run linters
+	@uv run ruff check ${PACKAGE_TARGET} tests
+	@uv run typos ${PACKAGE_TARGET} tests
+
+qa/full: qa/test qa/lint qa/types  ## Run the full set of quality checks
+	@echo "All quality checks pass!"
+
+qa/format:  ## Run code formatter
+	@uv run ruff check --select I --fix ${PACKAGE_TARGET} tests
+	@uv run ruff format ${PACKAGE_TARGET} tests
+
+
+## ==== Other Commands =================================================================================================
+
+publish: export CONFIRM_MESSAGE = This will create and push a release tag using the current package version. Continue?
+publish: _confirm  ## Publish the package by pushing a tag with the current version
+	@if [[ "$$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then \
+		echo "You must be on the main branch to publish." && exit 1; \
+	fi
+	@git tag v$$(uv version --short) && git push origin v$$(uv version --short)
+
+
+## ==== Helpers ========================================================================================================
+
+hooks:  ## Install/update pre-commit hooks
+	@uv run pre-commit install --hook-type=pre-commit --hook-type=pre-push
+
+clean:  ## Clean up build artifacts and other junk
+	@rm -rf .venv
+	@uv run pyclean . --debris
+	@rm -rf dist
+	@rm -rf .ruff_cache
+	@rm -rf .pytest_cache
+	@rm -f .coverage*
+	@rm -f .junit.xml
+
+help:  ## Show help message
+	@awk "$$PRINT_HELP_PREAMBLE" $(MAKEFILE_LIST)
+
+
+# ..... Environment ....................................................................................................
+
+PACKAGE_TARGET:=src/plummet
 PACKAGE_NAME:=plummet
 
-.PHONY: install
-install:
-	poetry install --extras=time-machine
 
-.PHONY: test
-test: install
-	poetry run pytest
+# ..... Make configuration .............................................................................................
 
-.PHONY: mypy
-mypy: install
-	poetry run mypy ${PACKAGE_NAME} --pretty
+.ONESHELL:
+SHELL:=/bin/bash
+.PHONY: qa qa/test qa/test/unit qa/test/integration qa/types qa/lint qa/full qa/format \
+	docs docs/build docs/serve \
+	app app/run app/debug \
+	publish \
+	hooks clean help
 
-.PHONY: lint
-lint: install
-	poetry run ruff check ${PACKAGE_NAME} tests
 
-.PHONY: qa
-qa: test mypy lint
-	echo "All quality checks pass!"
+# ..... Color table for pretty printing ................................................................................
 
-.PHONY: format
-format: install
-	poetry run ruff check ${PACKAGE_NAME} tests --fix
+RED    := \033[31m
+GREEN  := \033[32m
+YELLOW := \033[33m
+BLUE   := \033[34m
+TEAL   := \033[36m
+GRAY   := \033[90m
+CLEAR  := \033[0m
+ITALIC := \033[3m
 
-.PHONY: publish
-publish: install
-	git tag v$(shell poetry version --short)
-	git push origin v$(shell poetry version --short)
 
-.PHONY: clean
-clean: clean-eggs clean-build
-	@find . -iname '*.pyc' -delete
-	@find . -iname '*.pyo' -delete
-	@find . -iname '*~' -delete
-	@find . -iname '*.swp' -delete
-	@find . -iname '__pycache__' -delete
-	@rm -r .mypy_cache
-	@rm -r .pytest_cache
-	@find . -name '*.egg' -print0|xargs -0 rm -rf --
-	@rm -rf .eggs/
-	@rm -fr build/
-	@rm -fr dist/
-	@rm -fr *.egg-info
+# ..... Hidden auxiliary targets .......................................................................................
+
+_confirm:  # Requires confirmation before proceeding (Do not use directly)
+	@if [[ -z "$(CONFIRM)" ]]; then \
+		echo -n "Are you sure? [y/N] " && read ans && [ $${ans:-N} = y ]; \
+	fi
+
+
+# ..... Help printer ...................................................................................................
+
+define PRINT_HELP_PREAMBLE
+BEGIN {
+	print "Usage: $(YELLOW)make <target>$(CLEAR)"
+	print
+	print "Targets:"
+}
+/^## =+ .+( =+)?/ {
+    s = $$0
+    sub(/^## =+ /, "", s)
+    sub(/ =+/, "", s)
+	printf("\n  %s:\n", s)
+}
+/^## -+ .+( -+)?/ {
+    s = $$0
+    sub(/^## -+ /, "", s)
+    sub(/ -+/, "", s)
+	printf("\n    $(TEAL)> %s$(CLEAR)\n", s)
+}
+/^[$$()% 0-9a-zA-Z_\/-]+(\\:[$$()% 0-9a-zA-Z_\/-]+)*:.*?##/ {
+    t = $$0
+    sub(/:.*/, "", t)
+    h = $$0
+    sub(/.?*##/, "", h)
+    printf("    $(YELLOW)%-19s$(CLEAR) $(GRAY)$(ITALIC)%s$(CLEAR)\n", t, h)
+}
+endef
+export PRINT_HELP_PREAMBLE

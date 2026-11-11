@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## v2.0.0 - 2026-11-11
+- Replaced poetry with uv
+- Updated dependencies, including pendulum >= 3.0
+- Dropped support for old Python versions past EOL
+
 ## v1.2.1 - 2023-08-31
 - Fixed CI/CD
 
